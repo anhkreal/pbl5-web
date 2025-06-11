@@ -1,0 +1,77 @@
+{% extends 'app/base.html' %}
+
+{% block title %}Xem livefeed{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-xl mt-10 flex flex-col items-center">
+    <h2 class="text-2xl font-bold mb-6 text-center text-blue-700">Xem livefeed từ Raspberry Pi</h2>
+    <div class="w-full flex flex-col items-center">
+        <div class="relative w-full flex flex-col items-center">
+            <img id="livefeed-video" src="" alt="Livefeed" class="w-full max-w-xl h-72 object-contain rounded-xl border mb-4 bg-gray-100">
+        </div>
+        <div id="detect-result" class="w-full mt-4 flex flex-col items-center gap-2">
+            <div class="bg-blue-50 border border-blue-200 rounded-lg px-4 py-3 w-full max-w-xl text-center">
+                <span class="font-semibold text-gray-700">Côn trùng được nhận diện:</span>
+                <span id="detected-insect-vn" class="text-blue-700 font-bold">Đang nhận diện...</span>
+                <span id="detected-insect-scientific" class="block text-gray-500 italic mt-1"></span>
+                <a id="detail-link" href="#" class="hidden mt-3 inline-flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg font-semibold shadow hover:bg-green-700 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                    </svg>
+                    Chi tiết
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+let intervalId = null;
+let raspberryIp = "{{ raspberry_ip|default:'192.168.1.100' }}";
+let videoUrl = `http://${raspberryIp}:5000/video`;
+let videoImg = document.getElementById('livefeed-video');
+let vnName = document.getElementById('detected-insect-vn');
+let scName = document.getElementById('detected-insect-scientific');
+let detailLink = document.getElementById('detail-link');
+
+function fetchFrameAndDetect() {
+    videoImg.src = videoUrl + '?t=' + new Date().getTime();
+    fetch('/api/detect_insect', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ frame_url: videoImg.src })
+    })
+    .then(res => res.json())
+    .then(data => {
+        let vn = data.insect_name || 'Không xác định';
+        vnName.textContent = vn;
+        // Hiển thị độ tin cậy nếu có
+        if (typeof data.confidence !== 'undefined' && data.confidence !== null) {
+            let confElem = document.getElementById('detect-confidence');
+            if (!confElem) {
+                confElem = document.createElement('span');
+                confElem.id = 'detect-confidence';
+                confElem.className = 'block text-green-700 text-sm mt-1';
+                scName.parentNode.insertBefore(confElem, scName.nextSibling);
+            }
+            confElem.textContent = 'Độ tin cậy: ' + (data.confidence * 100).toFixed(2) + '%';
+        }
+        if (data.insect_name && data.id) {
+            scName.textContent = data.scientific_name;
+            detailLink.href = `/insect/${data.id}/`;
+            detailLink.classList.remove('hidden');
+        } else {
+            scName.textContent = '';
+            detailLink.classList.add('hidden');
+        }
+    })
+    .catch(() => {
+        vnName.textContent = 'Lỗi nhận diện';
+        scName.textContent = '';
+        detailLink.classList.add('hidden');
+    });
+}
+
+fetchFrameAndDetect();
+intervalId = setInterval(fetchFrameAndDetect, 5000);
+</script>
+{% endblock %}

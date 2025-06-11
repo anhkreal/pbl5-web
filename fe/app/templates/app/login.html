@@ -1,0 +1,28 @@
+{% extends 'app/base.html' %}
+
+{% block title %}Đăng nhập{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-xl mt-10">
+    <h2 class="text-2xl font-bold mb-6 text-center text-blue-700">Đăng nhập</h2>
+    {% if messages %}
+      <ul class="mb-4">
+        {% for message in messages %}
+          <li class="text-{{ message.tags }}-600">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    <form method="post" class="space-y-5">
+        {% csrf_token %}
+        <div>
+            <label for="username" class="block text-gray-700 font-medium mb-1">Tên tài khoản</label>
+            <input type="text" id="username" name="username" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+        </div>
+        <div>
+            <label for="password" class="block text-gray-700 font-medium mb-1">Mật khẩu</label>
+            <input type="password" id="password" name="password" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+        </div>
+        <button type="submit" class="w-full bg-gradient-to-r from-blue-500 to-blue-700 text-white py-2 rounded-lg font-semibold shadow hover:from-blue-600 hover:to-blue-800 transition">Đăng nhập</button>
+    </form>
+</div>
+{% endblock %}

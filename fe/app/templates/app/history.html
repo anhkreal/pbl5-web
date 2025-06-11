@@ -1,0 +1,39 @@
+{% extends 'app/base.html' %}
+
+{% block title %}Lịch sử hình ảnh{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto mt-10">
+    <h2 class="text-3xl font-extrabold text-blue-700 mb-8 text-center">Lịch sử nhận diện hình ảnh</h2>
+    <form method="get" class="mb-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+        <input type="date" name="date" value="{{ search_date }}" class="w-full sm:w-56 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <input type="text" name="q" value="{{ search_query }}" placeholder="Tìm theo tên côn trùng..." class="w-full sm:w-80 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <button type="submit" class="bg-gradient-to-r from-blue-500 to-blue-700 text-white px-5 py-2 rounded-lg font-semibold shadow hover:from-blue-600 hover:to-blue-800 transition">Tìm kiếm</button>
+    </form>
+    {% if grouped_history %}
+        {% for day, items in grouped_history.items %}
+        <div class="mb-10">
+            <div class="text-xl font-bold text-green-700 mb-4 border-l-4 border-green-400 pl-3">Ngày: {{ day }}</div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+                {% for item in items %}
+                <div class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition p-5 flex flex-col items-center">
+                    <img src="{{ item.image }}" alt="{{ item.vn_name }}" class="w-40 h-40 object-cover rounded-xl border mb-4">
+                    <h3 class="text-lg font-bold text-gray-800 mb-1">{{ item.vn_name }}</h3>
+                    <p class="text-gray-500 italic mb-1">{{ item.scientific_name }}</p>
+                    <p class="text-gray-400 text-sm mb-2">{{ item.time }}</p>
+                    <a href="{% url 'insect_detail' item.insect_id %}" class="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold shadow hover:bg-blue-700 transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                        </svg>
+                        Chi tiết
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="col-span-full text-center text-gray-500">Không có lịch sử phù hợp.</div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'app/base.html' %}
+
+{% block title %}Chi tiết côn trùng{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto bg-white p-8 rounded-2xl shadow-xl mt-10">
+    <div class="flex flex-col md:flex-row gap-8 items-center">
+        <img src="{{ insect.image }}" alt="{{ insect.name }}" class="w-64 h-64 object-cover rounded-xl border shadow">
+        <div class="flex-1">
+            <h2 class="text-3xl font-extrabold text-blue-700 mb-2">{{ insect.name }}</h2>
+            <p class="text-gray-500 italic mb-4">Tên khoa học: <span class="text-blue-700">{{ insect.scientific_name }}</span></p>
+            <div class="mb-3"><span class="font-semibold text-gray-700">ID:</span> {{ insect.id }}</div>
+            <div class="mb-3"><span class="font-semibold text-gray-700">Mô tả:</span> {{ insect.description }}</div>
+            <div class="mb-3"><span class="font-semibold text-gray-700">Môi trường sống:</span> {{ insect.habitat }}</div>
+            <div class="mb-3"><span class="font-semibold text-gray-700">Cây ký chủ:</span> {{ insect.host_plants }}</div>
+            <div class="mb-3"><span class="font-semibold text-gray-700">Biện pháp xử lý:</span> {{ insect.treatment }}</div>
+            <div class="mb-3"><span class="font-semibold text-gray-700">Mùa hoạt động:</span> {{ insect.active_season }}</div>
+        </div>
+    </div>
+    <div class="mt-8 text-center">
+        <a href="{% url 'thu_vien_con_trung' %}" class="inline-block bg-gradient-to-r from-green-500 to-blue-600 text-white px-6 py-2 rounded-lg font-semibold shadow hover:from-green-600 hover:to-blue-700 transition">Quay lại thư viện</a>
+    </div>
+</div>
+{% endblock %}
