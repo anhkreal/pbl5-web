@@ -84,16 +84,11 @@ fe/
    python manage.py makemigrations
    python manage.py migrate
    ```
-4. Seed dữ liệu mẫu:
-   ```
-   python manage.py update_insect_images   # Cập nhật ảnh cho 50 loài
-   python manage.py seed_imagehistory      # Sinh lịch sử nhận diện mẫu
-   ```
-5. Chạy server:
+4. Chạy server:
    ```
    python manage.py runserver
    ```
-6. Truy cập http://localhost:8000
+5. Truy cập http://localhost:8000
 
 ## Nhận diện AI
 - Model: `static/app/model/resnext50_32x4d_P2_BestFinetuned.pth` (PyTorch, 50 lớp)
