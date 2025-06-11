@@ -71,7 +71,6 @@ fe/
     view_detection.py # Nhận diện từ livefeed/API
     templates/app/    # Giao diện các trang
     static/app/       # Static files, model .pth
-    management/commands/ # Lệnh seed/update dữ liệu
   fe/
     settings.py, urls.py
 ```
