@@ -47,12 +47,7 @@ Hệ thống web nhận diện côn trùng sử dụng Django, MySQL (XAMPP), l�
 - Tìm kiếm theo tên tiếng Việt hoặc tên khoa học.
 - Xem chi tiết từng loài: mô tả, hình ảnh, mùa hoạt động, cây ký chủ, biện pháp xử lý...
 
-### 6. Quản lý dữ liệu và seed mẫu
-- Lệnh tự động cập nhật ảnh cho 50 loài côn trùng từ thư mục ảnh mẫu.
-- Lệnh sinh dữ liệu lịch sử nhận diện ngẫu nhiên cho 15 ngày gần đây.
-- Lệnh cập nhật lại thời gian lịch sử với giờ ngẫu nhiên trong khung 17:00-23:59.
-
-### 7. Công nghệ & bảo mật
+### 6. Công nghệ & bảo mật
 - Sử dụng Django ORM, custom user model, lưu ảnh dạng blob (BinaryField).
 - Kết nối MySQL (XAMPP) hoặc sqlite3.
 - Giao diện hiện đại, responsive với Tailwind CSS, Heroicons.
