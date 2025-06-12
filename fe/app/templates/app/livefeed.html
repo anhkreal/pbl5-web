@@ -25,23 +25,29 @@
     </div>
 </div>
 <script>
-let intervalId = null;
 let raspberryIp = "{{ raspberry_ip|default:'192.168.1.100' }}";
 let videoUrl = `http://${raspberryIp}:5000/video`;
+let snapshotUrl = `http://${raspberryIp}:5000/snapshot`;
 let videoImg = document.getElementById('livefeed-video');
 let vnName = document.getElementById('detected-insect-vn');
 let scName = document.getElementById('detected-insect-scientific');
 let detailLink = document.getElementById('detail-link');
+let isDetecting = false;
 
 function fetchFrameAndDetect() {
+    if (isDetecting) return;
+    isDetecting = true;
+    // Hiển thị ảnh livefeed (vẫn dùng videoUrl cho <img>)
     videoImg.src = videoUrl + '?t=' + new Date().getTime();
+    // Gửi frame_url là snapshotUrl để BE lấy đúng 1 frame ảnh tĩnh
     fetch('/api/detect_insect', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ frame_url: videoImg.src })
+        body: JSON.stringify({ frame_url: snapshotUrl + '?t=' + new Date().getTime() })
     })
     .then(res => res.json())
     .then(data => {
+        console.log('[FE DEBUG] Nhận diện trả về:', data);
         let vn = data.insect_name || 'Không xác định';
         vnName.textContent = vn;
         // Hiển thị độ tin cậy nếu có
@@ -64,14 +70,18 @@ function fetchFrameAndDetect() {
             detailLink.classList.add('hidden');
         }
     })
-    .catch(() => {
+    .catch((err) => {
+        console.error('[FE DEBUG] Lỗi nhận diện:', err);
         vnName.textContent = 'Lỗi nhận diện';
         scName.textContent = '';
         detailLink.classList.add('hidden');
+    })
+    .finally(() => {
+        isDetecting = false;
+        setTimeout(fetchFrameAndDetect, 5000); // Gọi lại sau 5s kể từ khi nhận xong
     });
 }
 
 fetchFrameAndDetect();
-intervalId = setInterval(fetchFrameAndDetect, 5000);
 </script>
 {% endblock %}
