@@ -47,12 +47,7 @@ Hệ thống web nhận diện côn trùng sử dụng Django, MySQL (XAMPP), l�
 - Tìm kiếm theo tên tiếng Việt hoặc tên khoa học.
 - Xem chi tiết từng loài: mô tả, hình ảnh, mùa hoạt động, cây ký chủ, biện pháp xử lý...
 
-### 6. Quản lý dữ liệu và seed mẫu
-- Lệnh tự động cập nhật ảnh cho 50 loài côn trùng từ thư mục ảnh mẫu.
-- Lệnh sinh dữ liệu lịch sử nhận diện ngẫu nhiên cho 15 ngày gần đây.
-- Lệnh cập nhật lại thời gian lịch sử với giờ ngẫu nhiên trong khung 17:00-23:59.
-
-### 7. Công nghệ & bảo mật
+### 6. Công nghệ & bảo mật
 - Sử dụng Django ORM, custom user model, lưu ảnh dạng blob (BinaryField).
 - Kết nối MySQL (XAMPP) hoặc sqlite3.
 - Giao diện hiện đại, responsive với Tailwind CSS, Heroicons.
@@ -71,7 +66,6 @@ fe/
     view_detection.py # Nhận diện từ livefeed/API
     templates/app/    # Giao diện các trang
     static/app/       # Static files, model .pth
-    management/commands/ # Lệnh seed/update dữ liệu
   fe/
     settings.py, urls.py
 ```
@@ -84,16 +78,11 @@ fe/
    python manage.py makemigrations
    python manage.py migrate
    ```
-4. Seed dữ liệu mẫu:
-   ```
-   python manage.py update_insect_images   # Cập nhật ảnh cho 50 loài
-   python manage.py seed_imagehistory      # Sinh lịch sử nhận diện mẫu
-   ```
-5. Chạy server:
+4. Chạy server:
    ```
    python manage.py runserver
    ```
-6. Truy cập http://localhost:8000
+5. Truy cập http://localhost:8000
 
 ## Nhận diện AI
 - Model: `static/app/model/resnext50_32x4d_P2_BestFinetuned.pth` (PyTorch, 50 lớp)
